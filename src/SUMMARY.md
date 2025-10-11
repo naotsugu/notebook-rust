@@ -1,3 +1,4 @@
 # Summary
 
-- [Chapter 1](./chapter_1.md)
+- [cargo](./cargo.md)
+- [type](./type.md)
