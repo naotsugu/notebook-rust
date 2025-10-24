@@ -1,6 +1,6 @@
 # Cargo
 
-`cargo` は Rust のビルドツール。
+`cargo` は Rust のビルドツール
 
 
 ## cargo コマンド
@@ -16,17 +16,17 @@
 | `cargo build` | 現在のプロジェクトをコンパイル(デフォルトはデバッグビルドで `--release` でリリースビルド) |
 | `cargo run` | プロジェクトをコンパイルし、生成された実行可能ファイルを実行 |
 | `cargo doc —open` | プロジェクトとその依存関係のドキュメントを生成し、ブラウザで開く |
-| `cargo test` | プロジェクト内のテスト（単体テスト、統合テスト）を実行 |
-| `cargo clean` | ビルド成果物（target ディレクトリ）を削除し、プロジェクトをクリーンな状態に戻す |
+| `cargo test` | プロジェクト内のテスト(単体テスト、統合テスト)を実行 |
+| `cargo clean` | ビルド成果物(target ディレクトリ)を削除し、プロジェクトをクリーンな状態に戻す |
 | `cargo update` | Cargo.toml の指定に基づいて、依存関係を最新バージョンに更新し Cargo.lock を再生成 |
 | `cargo install` | クレートをローカル環境にインストールし、バイナリ（コマンド）として使えるようにする |
 | `cargo uninstall` | cargo install でインストールしたクレートをアンインストール |
-| `cargo publish` | パッケージ（クレート）を crates.io （Rustの公式レジストリ）に公開 |
+| `cargo publish` | パッケージ(クレート)を crates.io （Rustの公式レジストリ）に公開 |
 | `cargo search` | crates.io でクレートを検索 |
-| `cargo add` | Cargo.toml ファイルに新しい依存関係（クレート）を簡単に追加 |
+| `cargo add` | Cargo.toml ファイルに新しい依存関係(クレート)を簡単に追加 |
 | `cargo remove` | Cargo.toml ファイルから依存関係を削除 |
 | `cargo fmt` | rustfmt を使って、プロジェクトのコードを整形 |
-| `cargo clippy` | clippy （リンター）を使って、コードの潜在的な問題や改善点をチェック |
+| `cargo clippy` | clippy(リンター)を使って、コードの潜在的な問題や改善点をチェック |
 | `cargo bench` | プロジェクトのベンチマークを実行 |
 | `cargo tree` | プロジェクトの依存関係ツリーを表示 |
 
@@ -34,7 +34,8 @@
 
 ## プロジェクト作成
 
-`cargo new` または `cargo init` を利用する。
+`cargo new` または `cargo init` を利用する
+
 
 ```shell
 cargo new hello_world
@@ -53,7 +54,7 @@ cd hello_world
 cargo init
 ```
 
-以下のようなプロジェクト構成となる
+以下のような構成となる
 
 ```
 hello_world/
@@ -64,7 +65,7 @@ hello_world/
      └── main.rs
 ```
 
-通常のソース・ファイルの構成は以下のようになる。
+通常のソース・ファイルの構成は以下のようになる
 
 ```
  ├── Cargo.toml
@@ -181,7 +182,8 @@ cargo test add
 cargo search serde
 ```
 
-`add` は `Cargo.toml` に依存を追加する(Cargo.toml を直接修正しても良い)。
+`add` は `Cargo.toml` に依存を追加する(Cargo.toml を直接修正しても良い)
+
 例えば `regex` を追加時は以下
 
 ```shell
@@ -196,8 +198,8 @@ cargo remove regex
 
 Cargo.toml でのバージョン指定はセマンティック バージョニング(SemVer)で指定する
 
-* `0.4` とするとバージョンは >=0.4.0 <0.5.0 の範囲のバージョン
-* `0.4.6`(^0.4.6 の省略形)とすると、>=0.4.6 <0.5.0の範囲内のバージョン
+* `0.4` とするとバージョンは `>=0.4.0 <0.5.0` の範囲のバージョン
+* `0.4.6`(`^0.4.6` の省略形)とすると、`>=0.4.6 <0.5.0` の範囲内のバージョン
 
 初回ダウンロードしたバージョンは、プロジェクトフォルダにある `Cargo.lock` に反映され、次回以降は同バージョンが利用される
 
@@ -247,7 +249,7 @@ cargo fix
 cargo doc --open
 ```
 
-ドキュメントは target/doc に生成される。オプション --open でブラウザ起動
+ドキュメントは `target/doc` に生成される。オプション --open でブラウザ起動
 
 `clean` は生成された成果物を削除
 
@@ -256,9 +258,8 @@ cargo clean
 ```
 
 
+`install` / `uninstall` はバイナリクレートをローカルにインストールする(他人が crates.io に共有したツールを利用する便利な方法を提供する)
 
-
-`install` / `uninstall` はバイナリクレートをローカルにインストールする(他人が crates.io に共有したツールを利用する便利な方法を提供する)。 
 例えば、ripgrep ツールをインストールするには以下
 
 ```shell
@@ -273,8 +274,9 @@ cargo install ripgrep
 cargo uninstall ripgrep
 ```
 
-cargo では、`$PATH` にあるバイナリが `cargo-something` という名前の場合、`cargo something` として cargo のサブコマンドであるかのように実行できる。
-つまり、`cargo install` を使用して拡張をインストールし、組み込みの cargo コマンドのように実行できる。
+cargo では、`$PATH` にあるバイナリが `cargo-something` という名前の場合、`cargo something` として cargo のサブコマンドであるかのように実行できる
+
+つまり、`cargo install` を使用して拡張をインストールし、組み込みの cargo コマンドのように実行できる
 
 このような独自のコマンドは、 `cargo --list` で列挙できる。
 
