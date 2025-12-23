@@ -52,6 +52,13 @@ if condition1 {
 }
 ```
 
+```rust
+let condition = true;
+let number = if condition { 5 } else { 6 };
+```
+
+
+
 ## match 式
 
 - `_` はワイルドカードパターンで全てのものにマッチする(最後に書く必要がある)
@@ -102,6 +109,166 @@ match expr {
 ```
 
 
+## while 式
+
+- 戻り値は常に `()`
+
+```rust
+while condition {
+    block
+}
+```
+
+```rust
+let mut number = 3;
+
+while number != 0 {
+    println!("{}!", number);
+    number -= 1;
+}
+```
+
+
+
+## while let 式
+
+```rust
+while let pattern = expr {
+    block
+}
+```
+
+## loop 式
+
+```rust
+loop {
+    block
+}
+```
+
+loop のボディ部では、`break` に値を与えると、その値が loop 式の値となる
+
+```rust
+let answer = loop {
+    if let Some(line) = next_line() {
+        if line.starts_with("answer: ") {
+            break line;
+        }
+    } else {
+        break "answer: nothing";
+    }
+};
+```
+
+
+## for 式
+
+- 戻り値は常に()
+- for ループで処理すると、move セマンティクスに従って、値が消費される
+
+```rust
+for pattern in iterable {
+    block
+}
+```
+
+```rust
+let a = [10, 20, 30];
+for element in a {
+    println!("the value is: {}", element);
+}
+```
+
+
+
+```rust
+let strings: Vec<String> = ...
+for s in strings {
+    println!("{}", s);
+}
+println!("{} error(s)", strings.len()); // コンパイルエラー
+```
+
+```rust
+for rs in &strings {
+    println!("String {:?}", *rs);
+}
+```
+
+## 参照
+
+- `&T` : 変更不能な共有参照
+ある値に対して複数の共有参照を持つことができるが、値を読み出すことしかできない
+
+- `&mut T` : 排他的な可変参照
+参照先の値を読み出し、変更することができる。
+ある値に対してこの種の参照が存在する間は、その値に対する他の参照は共有参照であれ可変参照であれ作ることはできない。
+
+
+## 配列
+
+- 型 `[T; N]` は、型 T の N 個の値の配列を表す
+- 配列のサイズは、コンパイル時に定まり、型の一部となる
+- 新しい要素を追加したり、縮小したりすることはできない
+
+```rust
+let lazy_caterer: [u32; 6] = [1, 2, 4, 7, 11, 16];
+let taxonomy = ["Animalia", "Arthropoda", "Insecta"];
+```
+
+`[V; N]` とすると、長さNの配列を V の値で初期化した配列が入手できる(Rustには、初期化されていない配列を作る記法はない)。
+以下はすべての要素が `true` の 10 の bool配列。
+
+```rust
+let mut sieve = [true; 10];
+```
+
+## ベクタVec<T>
+
+- ヒープ上に確保されるサイズを変更することができる型Tの配列
+
+```rust
+let mut primes = Vec::new();
+pal.push(2);
+pal.push(3);
+pal.push(5);
+```
+
+`vec!` マクロは、新しい空のベクタを作成して要素を追加するのと等価
+
+```rust
+let mut primes = vec![2, 3, 5];
+primes.push(7);
+```
+
+## スライス [T]
+
+- 配列やベクタのある領域を指す
+
+TODO
+
+
+## シャドーイング
+
+- 定義した変数と同じ名前の変数を新しく宣言できる
+- 新しい変数は、前の変数を覆い隠す
+
+```rust
+let x = 5;
+let x = x + 1;
+```
+
+## 範囲(range)
+
+- `..` 演算子は範囲(range)を生成する
+- `std::iter::IntoIterator` を実装している
+
+```rust
+for i in 0..20 {
+    println!("{}", i);
+}
+```
+
 
 ## 型エイリアス
 
@@ -115,13 +282,111 @@ fn decode(data: &Bytes) {
 ```
 
 
+## 発散する関数(divergent function)
+
+- 通常の意味で終了しない式には特別な型 `!` が割り当てられる
+
+```rust
+fn exit(code: i32) -> ! {
+}
+```
+
+## タプル (tuple)
+
+- 個々の要素が異なる型を持つことができる
+
+```rust
+let pair = (1, true);
+println!("Pair is {:?}", pair);
+println!("{}", pair.0);
+println!("{}", pair.1);
+```
+
+## ユニット型 （unit type）
+
+- 0要素のタプル `()`
+- 意味のある値を渡す必要がないにもかかわらず、コンテクストが何らかの型を要求する場合にユニット型を用いる。
+
+
+
+## Box
+
+- ヒープ上に値を確保する
+- `Box<T>` はヒープ上の 型T の値へのポインタ
+- `Box::new(v)` を呼ぶと、ヒープ上にメモリを確保し、値vをそこに移動し、そのヒープ空間を指すBoxを返す
+-  移動(move)されていない限り、スコープから外れるとメモリは即座に解放される
+
+```rust
+let t = (12, "eggs");
+let b = Box::new(t);
+```
+
+## static定数
+
+- 定数を導入するにはconstキーワードを用いる
+- 型を必ず指定する必要がある
+- 定数は慣例として、すべて大文字で単語間はアンダースコアで区切る
+- 必要なら `pub` がつく
+
+```rust
+const ROOM_TEMPERATURE: f64 = 20.0;
+```
+
+## Result
+
+- Rustには例外がない
+- 失敗する可能性のある関数は返り値の型で扱う
+
+```rust
+fn get_weather(location: LatLng) -> Result<WeatherReport, io::Error>
+```
+
+```rust
+match get_weather(hometown) {
+    Ok(report) => {
+        display_weather(hometown, &report);
+    }
+    Err(err) => {
+        println!("error querying the weather: {}", err);
+    }
+}
+```
+
+## ? 演算子
+
+- 成功した場合には、`Result` を解いて中の成功値を取り出す
+- 失敗した場合には、呼び出し元の関数から即時にリターンし、呼び出し連鎖の上流の関数にエラーを渡す
+  -`?` は返り値が `Result` 型の関数内部でしか利用できない。
+
+```rust
+let weather = get_weather(hometown)?;
+```
+
+`?`は、`Option` 型に対しても同様に使うことができる。値がNone だった場合には、その時点でリターンする。
+
+
+## main()でのエラー処理
+
+```rust
+fn main() {
+    if let Err(err) = calculate_tides() {
+        print_error(&err);
+        std::process::exit(1);
+    }
+}
+```
+
+TODO
+
+
+## etc
+
+
 変数はその値を所有する。
 その変数が宣言されたブロックから、プログラム実行の制御が離れたときに、変数はドロップされる。
 それに伴って値もドロップされる。
 
-Rustの `Box` 型は、所有の別の例だ。
-`Box<T>` はヒープ上の 型T の値へのポインタ。
-`Box::new(v)` を呼ぶと、ヒープ上にメモリを確保し、値vをそこに移動し、そのヒープ空間を指すBoxを返す。
+
 
 
 - 値を 1 つの所有者から別の所有者に移動することができる
@@ -217,4 +482,5 @@ Rustでは参照を作る際、参照解決する際には& 演算子と* 演算
 
 
 
+132
 

@@ -174,6 +174,16 @@ cargo test one_hundred
 cargo test add
 ```
 
+## ビルドプロファイル
+
+|コマンドライン|Cargo.tomlセクション|
+|---|---|
+|`cargo build`|`[profile.dev]`|
+|`cargo build --release `|`[profile.release]`|
+|`cargo test`|`[profile.test]`|
+
+
+
 ## クレート
 
 `search` は crates.io からパッケージを検索。例えば serde を検索時は以下
